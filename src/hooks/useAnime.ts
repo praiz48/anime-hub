@@ -61,6 +61,9 @@ export function useHiddenGems(limit: number = 8) {
     queryKey: animeKeys.hiddenGems(),
     queryFn: () => fetchHiddenGems(limit),
     staleTime: 1000 * 60 * 5,
+    retry: 1,
+    // Don't throw errors, just return empty array
+    throwOnError: false,
   });
 }
 

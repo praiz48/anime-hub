@@ -119,49 +119,38 @@ export async function fetchTopRatedAnime(limit: number = 8) {
 
 // Replace fetchHiddenGems with this
 
-// src/lib/api/jikan.ts - Updated fetchHiddenGems
+// Replace fetchHiddenGems with this:
 
 export async function fetchHiddenGems(limit: number = 8) {
   try {
-    // Try multiple genres to get varied "hidden gem" results
-    const hiddenGemGenreIds = [27, 28, 24, 32]; // Shounen, Comedy, Sci-Fi, Adventure
+    // Let's try the simplest possible request first
+    const url = `${JIKAN_BASE_URL}/top/anime?page=4&limit=${limit}`;
+    console.log("Fetching hidden gems from:", url);
 
-    // Randomly pick a genre
-    const randomGenre =
-      hiddenGemGenreIds[Math.floor(Math.random() * hiddenGemGenreIds.length)];
+    const response = await fetch(url);
 
-    // Fetch anime from that genre with low popularity
-    const response = await fetch(
-      `${JIKAN_BASE_URL}/anime?genres=${randomGenre}&order_by=popularity&sort=asc&limit=${limit}&sfw=true`,
-    );
+    console.log("Response status:", response.status);
 
     if (!response.ok) {
-      // Fallback: just get random anime
-      const fallbackResponse = await fetch(`${JIKAN_BASE_URL}/random/anime`);
-      if (!fallbackResponse.ok) {
-        // If all fails, return empty
-        return [];
-      }
-      const fallbackData = await fallbackResponse.json();
-      return fallbackData.data ? [fallbackData.data] : [];
+      console.error("Response not OK:", response.status, response.statusText);
+      return [];
     }
 
     const data = await response.json();
+    console.log("Data received:", data);
+    console.log("Number of results:", data.data?.length || 0);
 
-    // Filter out entries without images or with low scores
-    const filtered =
-      data.data?.filter(
-        (anime: Anime) =>
-          anime.images?.jpg?.image_url && anime.score && anime.score > 6, // Only show decently rated anime
-      ) || [];
+    // If we have results, log the first one to see structure
+    if (data.data && data.data.length > 0) {
+      console.log("First result:", data.data[0]);
+    }
 
-    return filtered.slice(0, limit);
+    return data.data || [];
   } catch (error) {
     console.error("Error fetching hidden gems:", error);
     return [];
   }
 }
-
 export async function fetchRandomAnime() {
   const response = await fetch(`${JIKAN_BASE_URL}/random/anime`);
   if (!response.ok) throw new Error("Failed to fetch random anime");
