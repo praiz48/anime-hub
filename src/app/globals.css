@@ -1,26 +1,186 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Surfaces */
+    --background: 240 11% 7%;
+    --surface: 240 11% 7%;
+    --surface-dim: 240 11% 7%;
+    --surface-bright: 235 10% 24%;
+    --surface-container-lowest: 240 14% 5%;
+    --surface-container-low: 235 12% 12%;
+    --surface-container: 235 11% 14%;
+    --surface-container-high: 230 10% 19%;
+    --surface-container-highest: 230 10% 22%;
+
+    /* Text */
+    --on-surface: 240 20% 91%;
+    --on-surface-variant: 260 18% 82%;
+    --inverse-surface: 240 20% 91%;
+    --inverse-on-surface: 235 10% 18%;
+
+    /* Outlines */
+    --outline: 270 8% 59%;
+    --outline-variant: 270 8% 31%;
+
+    /* Primary - Violet */
+    --primary: 260 100% 87%;
+    --on-primary: 265 100% 28%;
+    --primary-container: 255 100% 74%;
+    --on-primary-container: 265 100% 25%;
+    --inverse-primary: 255 67% 54%;
+    --primary-fixed: 260 100% 93%;
+    --primary-fixed-dim: 260 100% 87%;
+    --on-primary-fixed: 265 100% 18%;
+    --on-primary-fixed-variant: 255 79% 42%;
+
+    /* Secondary - Cyan */
+    --secondary: 190 100% 68%;
+    --on-secondary: 190 100% 12%;
+    --secondary-container: 190 100% 45%;
+    --on-secondary-container: 190 100% 18%;
+    --secondary-fixed: 190 100% 82%;
+    --secondary-fixed-dim: 190 91% 57%;
+    --on-secondary-fixed: 190 100% 7%;
+    --on-secondary-fixed-variant: 190 100% 18%;
+
+    /* Tertiary - Pink */
+    --tertiary: 340 100% 84%;
+    --on-tertiary: 340 100% 20%;
+    --tertiary-container: 335 92% 65%;
+    --on-tertiary-container: 340 100% 17%;
+    --tertiary-fixed: 340 100% 93%;
+    --tertiary-fixed-dim: 340 100% 84%;
+    --on-tertiary-fixed: 340 100% 12%;
+    --on-tertiary-fixed-variant: 335 100% 28%;
+
+    /* Error */
+    --error: 10 100% 84%;
+    --on-error: 0 100% 20%;
+    --error-container: 0 100% 29%;
+    --on-error-container: 10 100% 92%;
+
+    /* Surface Variant */
+    --surface-variant: 235 10% 22%;
+
+    /* Background */
+    --background: 240 11% 7%;
+    --on-background: 240 20% 91%;
+
+    /* Radius */
+    --radius: 0.75rem;
+  }
+
+  [data-theme="light"] {
+    /* Surfaces - Warm off-white with subtle purple tint */
+    --background: 260 20% 97%;
+    --surface: 260 20% 97%;
+    --surface-dim: 260 20% 97%;
+    --surface-bright: 260 15% 99%;
+    --surface-container-lowest: 260 25% 100%;
+    --surface-container-low: 260 15% 95%;
+    --surface-container: 260 15% 92%;
+    --surface-container-high: 260 12% 88%;
+    --surface-container-highest: 260 10% 84%;
+
+    /* Text - Deep purple-black */
+    --on-surface: 260 25% 12%;
+    --on-surface-variant: 260 15% 35%;
+    --inverse-surface: 260 25% 12%;
+    --inverse-on-surface: 260 20% 92%;
+
+    /* Outlines - Muted violet */
+    --outline: 260 12% 55%;
+    --outline-variant: 260 15% 80%;
+
+    /* Primary - Violet (adjusted for light bg) */
+    --primary: 255 79% 42%;
+    --on-primary: 0 0% 100%;
+    --primary-container: 255 100% 92%;
+    --on-primary-container: 255 79% 42%;
+    --inverse-primary: 260 100% 87%;
+    --primary-fixed: 260 100% 93%;
+    --primary-fixed-dim: 260 100% 87%;
+    --on-primary-fixed: 265 100% 18%;
+    --on-primary-fixed-variant: 255 79% 42%;
+
+    /* Secondary - Cyan (adjusted for light bg) */
+    --secondary: 190 100% 30%;
+    --on-secondary: 0 0% 100%;
+    --secondary-container: 190 100% 90%;
+    --on-secondary-container: 190 100% 30%;
+    --secondary-fixed: 190 100% 82%;
+    --secondary-fixed-dim: 190 91% 57%;
+    --on-secondary-fixed: 190 100% 7%;
+    --on-secondary-fixed-variant: 190 100% 18%;
+
+    /* Tertiary - Pink (adjusted for light bg) */
+    --tertiary: 335 100% 38%;
+    --on-tertiary: 0 0% 100%;
+    --tertiary-container: 340 100% 92%;
+    --on-tertiary-container: 335 100% 38%;
+    --tertiary-fixed: 340 100% 93%;
+    --tertiary-fixed-dim: 340 100% 84%;
+    --on-tertiary-fixed: 340 100% 12%;
+    --on-tertiary-fixed-variant: 335 100% 38%;
+
+    /* Error */
+    --error: 0 100% 35%;
+    --on-error: 0 0% 100%;
+    --error-container: 10 100% 92%;
+    --on-error-container: 0 100% 35%;
+
+    /* Surface Variant */
+    --surface-variant: 260 15% 92%;
+
+    /* Background */
+    --background: 260 20% 97%;
+    --on-background: 260 25% 12%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+}
+
+/* Glass Card Effect */
+.glass-card {
+  background: rgba(25, 27, 37, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Cinematic Gradient */
+.cinematic-gradient {
+  background: linear-gradient(
+    0deg,
+    hsl(var(--background)) 0%,
+    hsl(var(--background) / 0.7) 40%,
+    hsl(var(--background) / 0) 100%
+  );
+}
+
+/* Hide Scrollbar */
+.hide-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scroll::-webkit-scrollbar {
+  display: none;
 }
