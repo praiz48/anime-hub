@@ -6,28 +6,30 @@ import { HeroCarousel } from "@/app/(routes)/home/_components/HeroCarousel";
 import { AnimeSection } from "@/app/(routes)/home/_components/AnimeSection";
 import { QuoteCard } from "@/app/(routes)/home/_components/QuoteCard";
 import {
-  useSeasonalAnime,
   useTrendingAnime,
+  useSeasonalAnime,
   useTopRatedAnime,
   useHiddenGems,
+  useNextSeasonalAnime,
 } from "@/hooks/useAnime";
 import { useQuery } from "@tanstack/react-query";
+import {
+  StarIcon,
+  TrendingUp,
+  GemIcon,
+  FlameIcon,
+  Calendar,
+} from "lucide-react";
 
 export default function HomePage() {
   // Fetch all sections in parallel
-  // src/app/page.tsx - Add better error handling
   const seasonal = useSeasonalAnime(8);
+  const nextSeasonal = useNextSeasonalAnime(8);
   const trending = useTrendingAnime(8);
   const topRated = useTopRatedAnime(8);
   const hiddenGems = useHiddenGems(8);
 
-  // Check for errors and log them
-  if (seasonal.error) console.error("Seasonal error:", seasonal.error);
-  if (trending.error) console.error("Trending error:", trending.error);
-  if (topRated.error) console.error("Top rated error:", topRated.error);
-  if (hiddenGems.error) console.error("Hidden gems error:", hiddenGems.error);
-
-  // Fetch news
+  // Fetch news (still using ANN RSS)
   const {
     data: news,
     isLoading: newsLoading,
@@ -39,43 +41,51 @@ export default function HomePage() {
       if (!res.ok) throw new Error("Failed to fetch news");
       return res.json();
     },
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: 1000 * 60 * 60,
   });
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        {/* Hero Banner - News Carousel */}
         <HeroCarousel
           news={news || []}
           isLoading={newsLoading}
           error={newsError}
         />
 
-        {/* All sections */}
         <div className="max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-stack-lg">
           <AnimeSection
-            title="🆕 Just Released"
+            title="Just Released"
+            Icon={Calendar}
             data={seasonal.data}
             isLoading={seasonal.isLoading}
             error={seasonal.error}
             viewAllLink="/discover?season=now"
           />
+          <AnimeSection
+            title=" Upcoming"
+            Icon={TrendingUp}
+            data={nextSeasonal.data}
+            isLoading={nextSeasonal.isLoading}
+            error={nextSeasonal.error}
+            viewAllLink="/discover?season=next"
+          />
 
           <AnimeSection
-            title="🔥 Trending Now"
+            title="Trending Now"
+            Icon={FlameIcon}
             data={trending.data}
             isLoading={trending.isLoading}
             error={trending.error}
             viewAllLink="/discover?filter=trending"
           />
 
-          {/* Quote of the Day */}
           <QuoteCard />
 
           <AnimeSection
-            title="⭐ Top Rated"
+            title="Top Rated"
+            Icon={StarIcon}
             data={topRated.data}
             isLoading={topRated.isLoading}
             error={topRated.error}
@@ -83,7 +93,8 @@ export default function HomePage() {
           />
 
           <AnimeSection
-            title="💎 Hidden Gems"
+            title="Hidden Gems"
+            Icon={GemIcon}
             data={hiddenGems.data}
             isLoading={hiddenGems.isLoading}
             error={hiddenGems.error}

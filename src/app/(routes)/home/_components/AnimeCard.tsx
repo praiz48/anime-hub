@@ -3,50 +3,55 @@
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import type { AniListMedia } from "@/lib/api/anilist";
 
 interface AnimeCardProps {
-  anime: {
-    mal_id: number;
-    title: string;
-    images: {
-      jpg: { image_url: string };
-      webp: { image_url: string };
-    };
-    score?: number;
-    episodes?: number;
-    genres?: Array<{ name: string }>;
-  };
+  anime: AniListMedia;
   onClick?: () => void;
 }
 
 export function AnimeCard({ anime, onClick }: AnimeCardProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
+  const imageUrl = imageError
+    ? "/placeholder-anime.jpg"
+    : anime.coverImage?.large || anime.coverImage?.medium || "";
 
   return (
     <div
-      className="min-w-[200px] md:min-w-[240px] flex-shrink-0 group cursor-pointer snap-start"
+      className="min-w-[200px] md:min-w-[240px] max-w-[200px] md:max-w-[240px] flex-shrink-0 group cursor-pointer snap-start"
       onClick={onClick}
     >
-      <div className="relative aspect-[2/3] rounded-2xl overflow-hidden glass-card transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
-        {/* Image with loading state */}
+      <div className="relative aspect-[2/3] w-full rounded-2xl overflow-hidden glass-card transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
         <div className="relative w-full h-full">
           {isLoading && (
             <div className="absolute inset-0 bg-surface-container-high animate-pulse" />
           )}
-          <Image
-            src={anime.images.jpg.image_url}
-            alt={anime.title}
-            fill
-            sizes="(max-width: 768px) 200px, 240px"
-            className={cn(
-              "object-cover transition-transform duration-500 group-hover:scale-105",
-              isLoading ? "opacity-0" : "opacity-100",
-            )}
-            onLoad={() => setIsLoading(false)}
-            loading="lazy"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
-          />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={anime.title?.romaji || "Anime"}
+              fill
+              sizes="(max-width: 768px) 200px, 240px"
+              className={cn(
+                "object-cover transition-transform duration-500 group-hover:scale-105",
+                isLoading ? "opacity-0" : "opacity-100",
+              )}
+              onLoad={() => setIsLoading(false)}
+              onError={() => {
+                setIsLoading(false);
+                setImageError(true);
+              }}
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k="
+            />
+          ) : (
+            <div className="w-full h-full bg-surface-container-high flex items-center justify-center text-muted-foreground">
+              No Image
+            </div>
+          )}
         </div>
 
         {/* Badges */}
@@ -56,7 +61,7 @@ export function AnimeCard({ anime, onClick }: AnimeCardProps) {
           </div>
         )}
 
-        {anime.score && anime.score >= 9 && (
+        {anime.averageScore && anime.averageScore >= 85 && (
           <div className="absolute top-2 left-2 bg-primary-container px-2 py-1 rounded text-label-sm font-label-sm text-on-primary-container">
             TOP
           </div>
@@ -78,15 +83,13 @@ export function AnimeCard({ anime, onClick }: AnimeCardProps) {
         </div>
       </div>
 
-      <div className="mt-3">
-        <h3 className="font-title-md text-title-md text-on-surface truncate">
-          {anime.title}
+      {/* Title and genres with multi-line support */}
+      <div className="mt-3 min-h-[3.5rem] md:min-h-[4rem]">
+        <h3 className="font-title-md text-title-md text-on-surface line-clamp-3 leading-tight">
+          {anime.title?.english || anime.title?.romaji || "Unknown"}
         </h3>
-        <p className="font-body-md text-body-md text-on-surface-variant text-sm truncate">
-          {anime.genres
-            ?.slice(0, 2)
-            .map((g) => g.name)
-            .join(", ") || "Unknown"}
+        <p className="font-body-md text-body-md text-on-surface-variant text-sm truncate mt-0.5">
+          {anime.genres?.slice(0, 2).join(", ") || "Unknown"}
         </p>
       </div>
     </div>

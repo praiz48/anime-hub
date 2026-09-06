@@ -4,14 +4,16 @@
 import { AnimeCard } from "./AnimeCard";
 import { AnimeCardSkeleton } from "@/components/ui/skeletons/AnimeCardSkeleton";
 import { SectionHeader } from "./SectionHeader";
-import type { Anime } from "@/lib/api/jikan";
+import type { AniListMedia } from "@/lib/api/anilist";
+import { type LucideIcon } from "lucide-react";
 
 interface AnimeSectionProps {
   title: string;
-  data?: Anime[];
+  data?: AniListMedia[];
   isLoading: boolean;
   viewAllLink?: string;
   error?: Error | null;
+  Icon?: LucideIcon; // Optional icon prop
 }
 
 export function AnimeSection({
@@ -20,12 +22,13 @@ export function AnimeSection({
   isLoading,
   viewAllLink,
   error,
+  Icon,
 }: AnimeSectionProps) {
   // Error state
   if (error) {
     return (
       <section className="flex flex-col gap-6">
-        <SectionHeader title={title} viewAllLink={viewAllLink} />
+        <SectionHeader title={title} viewAllLink={viewAllLink} icon={Icon} />
         <div className="p-8 text-center bg-error-container/20 rounded-2xl border border-error/20">
           <p className="text-error">Failed to load {title.toLowerCase()}</p>
           <button
@@ -43,7 +46,7 @@ export function AnimeSection({
   if (isLoading) {
     return (
       <section className="flex flex-col gap-6">
-        <SectionHeader title={title} viewAllLink={viewAllLink} />
+        <SectionHeader title={title} viewAllLink={viewAllLink} icon={Icon} />
         <div className="flex gap-6 overflow-x-auto hide-scroll pb-8 pt-4 -mt-4 px-2 -mx-2">
           {Array.from({ length: 6 }).map((_, i) => (
             <AnimeCardSkeleton key={i} />
@@ -57,7 +60,7 @@ export function AnimeSection({
   if (!data || data.length === 0) {
     return (
       <section className="flex flex-col gap-6">
-        <SectionHeader title={title} viewAllLink={viewAllLink} />
+        <SectionHeader title={title} viewAllLink={viewAllLink} icon={Icon} />
         <div className="p-8 text-center bg-surface-container rounded-2xl border border-border">
           <p className="text-muted-foreground">
             No anime found in this section
@@ -70,13 +73,13 @@ export function AnimeSection({
   // Data loaded
   return (
     <section className="flex flex-col gap-6">
-      <SectionHeader title={title} viewAllLink={viewAllLink} />
+      <SectionHeader title={title} viewAllLink={viewAllLink} icon={Icon} />
       <div className="flex gap-6 overflow-x-auto hide-scroll pb-8 pt-4 -mt-4 px-2 -mx-2 snap-x">
         {data.map((anime, index) => (
           <AnimeCard
-            key={`${anime.mal_id}-${index}`} // ← Combine id + index for uniqueness
+            key={`${anime.id}-${index}`} // ← Combine id + index for uniqueness
             anime={anime}
-            onClick={() => (window.location.href = `/anime/${anime.mal_id}`)}
+            onClick={() => (window.location.href = `/anime/${anime.id}`)}
           />
         ))}
       </div>

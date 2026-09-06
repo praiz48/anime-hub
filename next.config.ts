@@ -23,6 +23,25 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "s4.anilist.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "img.anilist.co",
+        port: "",
+        pathname: "/**",
+      },
+      // Add any other AniList subdomains you might encounter
+      {
+        protocol: "https",
+        hostname: "*.anilist.co",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
