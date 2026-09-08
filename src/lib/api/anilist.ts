@@ -325,13 +325,50 @@ export const QUERIES = {
     }
   `,
 
-  // Search Anime
   search: gql`
-    query SearchAnime(
-      $search: String
+    query SearchAnime($search: String, $page: Int = 1, $perPage: Int = 20) {
+      Page(page: $page, perPage: $perPage) {
+        media(search: $search, type: ANIME, isAdult: false) {
+          id
+          title {
+            romaji
+            english
+            native
+          }
+          coverImage {
+            large
+            medium
+          }
+          episodes
+          status
+          averageScore
+          popularity
+          genres
+          description(asHtml: false)
+          season
+          seasonYear
+          startDate {
+            year
+            month
+            day
+          }
+        }
+        pageInfo {
+          total
+          currentPage
+          lastPage
+          hasNextPage
+          perPage
+        }
+      }
+    }
+  `,
+  // Add this new query for browsing without search
+  browse: gql`
+    query BrowseAnime(
       $page: Int = 1
       $perPage: Int = 20
-      $genre: String
+      $genre: [String]
       $status: MediaStatus
       $season: MediaSeason
       $seasonYear: Int
@@ -339,9 +376,8 @@ export const QUERIES = {
     ) {
       Page(page: $page, perPage: $perPage) {
         media(
-          search: $search
           type: ANIME
-          genre_in: [$genre]
+          genre_in: $genre
           status: $status
           season: $season
           seasonYear: $seasonYear
@@ -382,7 +418,6 @@ export const QUERIES = {
       }
     }
   `,
-
   // Random Anime
   random: gql`
     query GetRandomAnime {
@@ -519,8 +554,47 @@ export async function fetchAnimeDetails(id: number) {
   });
 }
 
+// Search function - Now only handles search, no conditional logic
 export async function searchAnime(
   search: string,
+  page: number = 1,
+  perPage: number = 20,
+) {
+  // If no search query, return empty results
+  if (!search || search.trim().length === 0) {
+    return {
+      media: [],
+      pageInfo: {
+        total: 0,
+        currentPage: 1,
+        lastPage: 1,
+        hasNextPage: false,
+        perPage,
+      },
+    };
+  }
+
+  const variables = {
+    search: search.trim(),
+    page,
+    perPage,
+  };
+
+  try {
+    const data = await request<{ Page: PageResponse["Page"] }>(
+      ANILIST_API,
+      QUERIES.search,
+      variables,
+    );
+    return data.Page;
+  } catch (error) {
+    console.error("Search error:", error);
+    throw error;
+  }
+}
+
+// Browse function - Pure browsing with filters
+export async function browseAnime(
   page: number = 1,
   perPage: number = 20,
   filters?: {
@@ -528,23 +602,30 @@ export async function searchAnime(
     status?: string;
     season?: string;
     seasonYear?: number;
-    sort?: string[];
+    sort?: string;
   },
 ) {
-  return rateLimiter.add(async () => {
-    const variables = {
-      search,
-      page,
-      perPage,
-      ...filters,
-    };
+  const variables = {
+    page,
+    perPage,
+    genre: filters?.genre ? [filters.genre] : null,
+    status: filters?.status || null,
+    season: filters?.season || null,
+    seasonYear: filters?.seasonYear || null,
+    sort: filters?.sort ? [filters.sort as any] : ["POPULARITY_DESC"],
+  };
+
+  try {
     const data = await request<{ Page: PageResponse["Page"] }>(
       ANILIST_API,
-      QUERIES.search,
+      QUERIES.browse,
       variables,
     );
     return data.Page;
-  });
+  } catch (error) {
+    console.error("Browse error:", error);
+    throw error;
+  }
 }
 
 export async function fetchRandomAnime() {

@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X, Search, Sun, Moon } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { usePathname } from "next/navigation";
+import { SearchDropdown } from "@/components/ui/SearchDropdown";
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,11 +27,10 @@ export function Header() {
 
   return (
     <>
-      {/* Header Bar */}
       <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
           <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo - Mobile */}
+            {/* Logo */}
             <Link
               href="/"
               className="font-headline-lg text-headline-lg-mobile md:text-headline-lg font-black text-primary tracking-tighter"
@@ -38,7 +38,7 @@ export function Header() {
               Anime<span className="text-on-surface">Hub</span>
             </Link>
 
-            {/* Desktop Navigation - Hidden on mobile */}
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
@@ -61,26 +61,22 @@ export function Header() {
               })}
             </nav>
 
-            {/* Right Side - Search + Theme + Mobile Menu */}
+            {/* Right Side */}
             <div className="flex items-center gap-2 md:gap-4">
-              {/* Search Bar - Desktop */}
-              <div className="hidden lg:block relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
-                <input
-                  type="text"
-                  placeholder="Search anime..."
-                  className="bg-surface-container-high border border-outline-variant rounded-full py-2 pl-10 pr-4 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-all"
+              {/* Search Button - Opens dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="p-2 text-on-surface-variant hover:text-on-surface transition-colors"
+                  aria-label="Search"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+                <SearchDropdown
+                  isOpen={isSearchOpen}
+                  onClose={() => setIsSearchOpen(false)}
                 />
               </div>
-
-              {/* Search Icon - Mobile/Tablet */}
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="lg:hidden p-2 text-on-surface-variant hover:text-on-surface transition-colors"
-                aria-label="Search"
-              >
-                <Search className="w-5 h-5" />
-              </button>
 
               {/* Theme Toggle */}
               <ThemeToggle />
@@ -99,21 +95,6 @@ export function Header() {
               </button>
             </div>
           </div>
-
-          {/* Mobile Search Bar - Collapsible */}
-          {isSearchOpen && (
-            <div className="lg:hidden py-3 border-t border-white/5">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
-                <input
-                  type="text"
-                  placeholder="Search anime..."
-                  className="w-full bg-surface-container-high border border-outline-variant rounded-full py-2.5 pl-10 pr-4 text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                  autoFocus
-                />
-              </div>
-            </div>
-          )}
         </div>
       </header>
 

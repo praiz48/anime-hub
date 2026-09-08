@@ -7,6 +7,7 @@ import {
   fetchHiddenGems,
   fetchAnimeDetails,
   searchAnime,
+  browseAnime,
   fetchRandomAnime,
   getCurrentSeason,
   getNextSeason,
@@ -78,17 +79,38 @@ export function useAnimeDetails(id: number) {
   });
 }
 
+// Search hook - Now only for search, no browse logic
 export function useSearchAnime(
   query: string,
   page: number = 1,
   perPage: number = 20,
-  filters?: any,
 ) {
   return useQuery({
-    queryKey: [...animeKeys.search(query), page, filters],
-    queryFn: () => searchAnime(query, page, perPage, filters),
+    queryKey: [...animeKeys.search(query), page],
+    queryFn: () => searchAnime(query, page, perPage),
     staleTime: 1000 * 60 * 5,
-    enabled: query.length > 0,
+    enabled: query.length > 0, // Only run when there's a query
+    retry: 1,
+  });
+}
+
+// New browse hook for discover page
+export function useBrowseAnime(
+  page: number = 1,
+  perPage: number = 20,
+  filters?: {
+    genre?: string;
+    status?: string;
+    season?: string;
+    seasonYear?: number;
+    sort?: string;
+  },
+) {
+  return useQuery({
+    queryKey: ["browse", filters, page],
+    queryFn: () => browseAnime(page, perPage, filters),
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
   });
 }
 
