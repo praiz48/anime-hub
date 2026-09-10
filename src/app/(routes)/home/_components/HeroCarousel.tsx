@@ -169,10 +169,6 @@ export function HeroCarousel({ news, isLoading, error }: HeroCarouselProps) {
               <Play className="w-5 h-5 fill-current" />
               Read Full Story
             </Link>
-            <button className="glass-card text-on-surface font-title-md text-title-md px-5 md:px-6 py-2.5 md:py-3 rounded-full flex items-center gap-2 hover:bg-white/10 transition-all">
-              <Plus className="w-5 h-5" />
-              Bookmark
-            </button>
           </div>
         </div>
       </div>

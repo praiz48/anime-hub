@@ -1,18 +1,41 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { Heart } from "lucide-react";
+import {
+  isFavorite,
+  toggleFavorite,
+} from "@/app/(routes)/favorites/_utils/favorites";
 import type { AniListMedia } from "@/lib/api/anilist";
 
 interface AnimeCardProps {
   anime: AniListMedia;
   onClick?: () => void;
+  showBookmark?: boolean;
 }
 
-export function AnimeCard({ anime, onClick }: AnimeCardProps) {
+export function AnimeCard({
+  anime,
+  onClick,
+  showBookmark = true,
+}: AnimeCardProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+  const [isFav, setIsFav] = useState(false);
+
+  // Check if anime is favorited on mount and when anime.id changes
+  useEffect(() => {
+    setIsFav(isFavorite(anime.id));
+  }, [anime.id]);
+
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(anime.id);
+    setIsFav(!isFav);
+  };
 
   const imageUrl = imageError
     ? "/placeholder-anime.jpg"
@@ -54,25 +77,41 @@ export function AnimeCard({ anime, onClick }: AnimeCardProps) {
           )}
         </div>
 
+        {/* Bookmark button with visual feedback */}
+        {showBookmark && (
+          <button
+            onClick={handleBookmark}
+            className="absolute top-2 right-2 p-2 rounded-full bg-surface/80 backdrop-blur-md hover:bg-surface transition-all duration-300 z-10 group/bookmark"
+            aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
+          >
+            <Heart
+              className={cn(
+                "w-5 h-5 transition-all duration-300",
+                isFav
+                  ? "fill-error text-red-500 scale-110"
+                  : "text-on-surface-variant hover:text-error group-hover/bookmark:scale-110",
+              )}
+            />
+          </button>
+        )}
+
         {/* Badges */}
         {anime.episodes && (
-          <div className="absolute top-2 right-2 bg-surface/80 backdrop-blur-md px-2 py-1 rounded text-label-sm font-label-sm text-secondary border border-white/10">
+          <div className="absolute top-2 left-2 bg-surface/80 backdrop-blur-md px-2 py-1 rounded text-label-sm font-label-sm text-secondary border border-white/10">
             Ep {anime.episodes}
           </div>
         )}
 
         {anime.averageScore && anime.averageScore >= 85 && (
-          <div className="absolute top-2 left-2 bg-primary-container px-2 py-1 rounded text-label-sm font-label-sm text-on-primary-container">
+          <div className="absolute bottom-2 left-2 bg-primary-container px-2 py-1 rounded text-label-sm font-label-sm text-on-primary-container">
             TOP
           </div>
         )}
 
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-80" />
 
-        {/* Play button on hover */}
         <div className="absolute bottom-0 left-0 w-full p-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center text-on-primary shadow-[0_0_15px_rgba(208,188,255,0.6)]">
+          <button className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center text-on-primary shadow-[0_0_15px_rgba(208,188,255,0.6)] hover:scale-105 transition-transform">
             <span
               className="material-symbols-outlined"
               style={{ fontVariationSettings: "'FILL' 1" }}
@@ -83,9 +122,8 @@ export function AnimeCard({ anime, onClick }: AnimeCardProps) {
         </div>
       </div>
 
-      {/* Title and genres with multi-line support */}
       <div className="mt-3 min-h-[3.5rem] md:min-h-[4rem]">
-        <h3 className="font-title-md text-title-md text-on-surface line-clamp-3 leading-tight">
+        <h3 className="font-title-md text-title-md text-on-surface line-clamp-2 leading-tight">
           {anime.title?.english || anime.title?.romaji || "Unknown"}
         </h3>
         <p className="font-body-md text-body-md text-on-surface-variant text-sm truncate mt-0.5">
