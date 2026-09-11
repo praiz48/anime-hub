@@ -553,6 +553,57 @@ export async function fetchAnimeDetails(id: number) {
     return data.Media;
   });
 }
+export async function fetchAnimeBatch(ids: number[]) {
+  if (!ids || ids.length === 0) return [];
+
+  const query = gql`
+    query ($ids: [Int]) {
+      Page(page: 1, perPage: 50) {
+        media(id_in: $ids, type: ANIME) {
+          id
+          title {
+            romaji
+            english
+            native
+          }
+          coverImage {
+            large
+            medium
+          }
+          episodes
+          status
+          averageScore
+          popularity
+          genres
+          description(asHtml: false)
+          season
+          seasonYear
+          startDate {
+            year
+            month
+            day
+          }
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    ids: ids,
+  };
+
+  try {
+    const data = await request<{ Page: PageResponse["Page"] }>(
+      ANILIST_API,
+      query,
+      variables,
+    );
+    return data.Page.media;
+  } catch (error) {
+    console.error("Batch fetch error:", error);
+    throw error;
+  }
+}
 
 // Search function - Now only handles search, no conditional logic
 export async function searchAnime(

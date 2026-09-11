@@ -8,7 +8,7 @@ import {
   addFavorite,
   isFavorite,
 } from "../_utils/favorites";
-import { fetchAnimeDetails } from "@/lib/api/anilist";
+import { fetchAnimeBatch } from "@/lib/api/anilist";
 
 export function useFavorites() {
   const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
@@ -28,21 +28,7 @@ export function useFavorites() {
     refetch,
   } = useQuery({
     queryKey: ["favorites", favoriteIds],
-    queryFn: async () => {
-      if (!favoriteIds.length) return [];
-
-      // Fetch all favorites in parallel
-      const promises = favoriteIds.map((id) => fetchAnimeDetails(id));
-      const results = await Promise.allSettled(promises);
-
-      // Filter out failed requests
-      return results
-        .filter(
-          (result): result is PromiseFulfilledResult<any> =>
-            result.status === "fulfilled",
-        )
-        .map((result) => result.value);
-    },
+    queryFn: () => fetchAnimeBatch(favoriteIds), // Use the batch function
     enabled: isClient && favoriteIds.length > 0,
     staleTime: 1000 * 60 * 5,
   });
