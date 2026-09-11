@@ -420,9 +420,14 @@ export const QUERIES = {
   `,
   // Random Anime
   random: gql`
-    query GetRandomAnime {
-      Page(page: 1, perPage: 1) {
-        media(sort: POPULARITY_DESC, type: ANIME, isAdult: false) {
+    query GetRandomAnime($page: Int!) {
+      Page(page: $page, perPage: 1) {
+        media(
+          type: ANIME
+          isAdult: false
+          sort: POPULARITY_DESC
+          averageScore_greater: 70
+        ) {
           id
           title {
             romaji
@@ -431,11 +436,27 @@ export const QUERIES = {
           }
           coverImage {
             large
+            medium
           }
+          bannerImage
+          description(asHtml: false)
+          episodes
+          status
           averageScore
           popularity
           genres
-          description(asHtml: false)
+          season
+          seasonYear
+          studios {
+            nodes {
+              name
+            }
+          }
+          trailer {
+            id
+            site
+            thumbnail
+          }
         }
       }
     }
@@ -679,13 +700,33 @@ export async function browseAnime(
   }
 }
 
+// Random Anime - Fetch from a random page for variety
 export async function fetchRandomAnime() {
-  return rateLimiter.add(async () => {
-    const data = await request<{ Page: PageResponse["Page"] }>(
+  // Generate a random page between 1 and 50 for variety
+  const randomPage = Math.floor(Math.random() * 50) + 1;
+
+  const variables = { page: randomPage };
+
+  try {
+    const data = await request<{ Page: { media: AniListMedia[] } }>(
       ANILIST_API,
       QUERIES.random,
-      {},
+      variables,
     );
+
+    // If no results (rare), try again with page 1
+    if (!data.Page.media || data.Page.media.length === 0) {
+      const fallbackData = await request<{ Page: { media: AniListMedia[] } }>(
+        ANILIST_API,
+        QUERIES.random,
+        { page: 1 },
+      );
+      return fallbackData.Page.media[0] || null;
+    }
+
     return data.Page.media[0] || null;
-  });
+  } catch (error) {
+    console.error("Random anime error:", error);
+    throw error;
+  }
 }
