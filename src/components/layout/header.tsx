@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X, Search, Sun, Moon } from "lucide-react";
+import { Menu, X, Search, Sun, Moon, Camera } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { SearchDropdown } from "@/components/ui/SearchDropdown";
 
@@ -23,6 +23,7 @@ export function Header() {
     { label: "News", href: "/news" },
     { label: "Favorites", href: "/favorites" },
     { label: "Random", href: "/random" },
+    { label: "Trace Scene", href: "/screenshot" },
   ];
 
   return (
@@ -126,7 +127,7 @@ export function Header() {
                 <h2 className="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">
                   Anime Hub
                 </h2>
-                <p className="text-label-sm font-label-sm text-on-surface-variant">
+                <p className="text-label-sm font-label-sm pt-4 text-on-surface-variant">
                   Premium Discovery
                 </p>
               </div>
@@ -162,40 +163,12 @@ export function Header() {
                       {item.label === "News" && "newspaper"}
                       {item.label === "Favorites" && "favorite"}
                       {item.label === "Random" && "casino"}
+                      {item.label === "Trace Scene" && "camera"}
                     </span>
                     {item.label}
                   </Link>
                 );
               })}
-
-              {/* Extra items for mobile */}
-              <Link
-                href="/screenshot"
-                className="flex items-center gap-4 px-4 py-3 rounded-xl font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all"
-              >
-                <span className="material-symbols-outlined text-xl">
-                  image_search
-                </span>
-                Trace
-              </Link>
-            </div>
-
-            {/* Footer */}
-            <div className="px-6 mt-auto flex flex-col gap-4">
-              <button className="w-full bg-primary text-on-primary rounded-full py-3 font-title-md text-title-md hover:bg-primary-fixed transition-colors">
-                Upgrade to Pro
-              </button>
-              <div className="border-t border-white/5 pt-4">
-                <Link
-                  href="/settings"
-                  className="flex items-center gap-4 text-on-surface-variant hover:text-on-surface px-4 py-2 font-body-md text-body-md transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">
-                    settings
-                  </span>
-                  Settings
-                </Link>
-              </div>
             </div>
           </div>
         </nav>

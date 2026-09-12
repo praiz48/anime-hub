@@ -35,10 +35,33 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-      // Add any other AniList subdomains you might encounter
       {
         protocol: "https",
         hostname: "*.anilist.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "trace.moe",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.trace.moe",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.trace.moe",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "nekos.best",
         port: "",
         pathname: "/**",
       },
