@@ -43,7 +43,7 @@ export function AnimeCard({
 
   return (
     <div
-      className="min-w-[200px] md:min-w-[240px] max-w-[200px] md:max-w-[240px] flex-shrink-0 group cursor-pointer snap-start"
+      className=" p-2 min-w-[200px] md:min-w-[240px] max-w-[200px] md:max-w-[240px] flex-shrink-0 group cursor-pointer snap-start"
       onClick={onClick}
     >
       <div className="relative aspect-[2/3] w-full rounded-2xl overflow-hidden glass-card transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
@@ -123,7 +123,7 @@ export function AnimeCard({
       </div>
 
       <div className="mt-3 min-h-[3.5rem] md:min-h-[4rem]">
-        <h3 className="font-title-md text-title-md text-on-surface line-clamp-2 leading-tight">
+        <h3 className="font-title-md text-title-md text-on-surface line-clamp-3 leading-tight">
           {anime.title?.english || anime.title?.romaji || "Unknown"}
         </h3>
         <p className="font-body-md text-body-md text-on-surface-variant text-sm truncate mt-0.5">

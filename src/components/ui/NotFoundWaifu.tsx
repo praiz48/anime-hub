@@ -20,7 +20,7 @@ interface NotFoundWaifuProps {
 
 export function NotFoundWaifu({
   title = "This page doesn't exist",
-  description = "But here's a cute anime art to make up for it. Maybe you took a wrong turn?",
+  description = "Maybe you took a wrong turn?",
   bigNumber = "404",
   children,
 }: NotFoundWaifuProps) {

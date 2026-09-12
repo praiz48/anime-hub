@@ -23,7 +23,7 @@ export default function Error({
         {/* Reuse the same waifu background component */}
         <NotFoundWaifu
           title="Something went wrong"
-          description="An unexpected error occurred. Here's a cute anime art while we sort it out."
+          description="An unexpected error occurred. "
         >
           <div className="flex flex-col sm:flex-row gap-3">
             <button

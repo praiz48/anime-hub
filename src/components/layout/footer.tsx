@@ -5,13 +5,7 @@ import Link from "next/link";
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const footerLinks = [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-    { label: "API Docs", href: "/api-docs" },
-    { label: "Contact Us", href: "/contact" },
-    { label: "Careers", href: "/careers" },
-  ];
+  const footerLinks = [{ label: "Privacy Policy", href: "/privacy" }];
 
   return (
     <footer className="bg-surface-container-lowest border-t border-surface-variant mt-stack-lg">
@@ -24,7 +18,7 @@ export function Footer() {
 
           {/* Copyright */}
           <div className="text-label-sm font-label-sm text-on-surface-variant text-center order-3 md:order-2">
-            © {currentYear} Anime Hub. All rights reserved.
+            © {currentYear} Anime Hub by Pizi dev. All rights reserved.
           </div>
 
           {/* Links - Stack on mobile, row on desktop */}

@@ -56,6 +56,15 @@ export default function HomePage() {
 
         <div className="max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-stack-lg">
           <AnimeSection
+            title="Trending Now"
+            Icon={FlameIcon}
+            data={trending.data}
+            isLoading={trending.isLoading}
+            error={trending.error}
+            viewAllLink="/discover?filter=trending"
+          />
+
+          <AnimeSection
             title="Just Released"
             Icon={Calendar}
             data={seasonal.data}
@@ -70,15 +79,6 @@ export default function HomePage() {
             isLoading={nextSeasonal.isLoading}
             error={nextSeasonal.error}
             viewAllLink="/discover?season=next"
-          />
-
-          <AnimeSection
-            title="Trending Now"
-            Icon={FlameIcon}
-            data={trending.data}
-            isLoading={trending.isLoading}
-            error={trending.error}
-            viewAllLink="/discover?filter=trending"
           />
 
           <QuoteCard />

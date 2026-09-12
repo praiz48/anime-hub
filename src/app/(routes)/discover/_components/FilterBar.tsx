@@ -1,6 +1,6 @@
 "use client";
 
-import { Filter, X, RefreshCw } from "lucide-react";
+import { Filter, RefreshCw } from "lucide-react";
 import type { DiscoverFilters } from "../_hooks/useDiscover";
 import { getCurrentSeason } from "@/lib/api/anilist";
 
@@ -59,7 +59,6 @@ const currentSeason = getCurrentSeason();
 export function FilterBar({
   filters,
   onFilterChange,
-  onClearFilters,
   onResetToSeasonal,
 }: FilterBarProps) {
   const hasActiveFilters = Object.keys(filters).some((key) => {
@@ -83,13 +82,6 @@ export function FilterBar({
               >
                 <RefreshCw className="w-3 h-3" />
                 Current Season
-              </button>
-              <button
-                onClick={onClearFilters}
-                className="text-secondary font-label-sm text-label-sm hover:underline transition-colors flex items-center gap-1"
-              >
-                <X className="w-3 h-3" />
-                Clear All
               </button>
             </>
           )}

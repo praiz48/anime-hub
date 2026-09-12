@@ -8,7 +8,7 @@ export default function NotFound() {
       <main className="flex-grow relative">
         <NotFoundWaifu
           title="This page doesn't exist"
-          description="But here's a cute anime art to make up for it. Maybe you took a wrong turn?"
+          description=" Maybe you took a wrong turn?"
           bigNumber="404"
         >
           <div className="flex flex-col sm:flex-row gap-3">

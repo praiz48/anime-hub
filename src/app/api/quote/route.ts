@@ -5,48 +5,52 @@ const QUOTES = [
   {
     anime: "Naruto",
     character: "Naruto Uzumaki",
-    quote: "Believe it! I'm going to become Hokage one day!",
+    quote: "Believe it!",
   },
   {
     anime: "One Piece",
     character: "Monkey D. Luffy",
-    quote: "I'm going to be the Pirate King!",
+    quote: "I'm gonna be King of the Pirates!",
   },
   {
     anime: "Attack on Titan",
-    character: "Eren Yeager",
-    quote: "I'll keep moving forward until I destroy my enemies.",
+    character: "Erwin Smith",
+    quote: "My soldiers, rage!",
   },
   {
     anime: "Death Note",
-    character: "L",
-    quote: "I am justice. I protect the innocent and punish the guilty.",
+    character: "Light Yagami",
+    quote: "I am Kira.",
   },
   {
-    anime: "Fullmetal Alchemist",
+    anime: "Fullmetal Alchemist: Brotherhood",
     character: "Edward Elric",
-    quote: "Equivalent exchange. That's the law of the world.",
+    quote: "Who are you calling so short you can't see him?",
   },
-  { anime: "My Hero Academia", character: "All Might", quote: "I AM HERE!" },
+  {
+    anime: "My Hero Academia",
+    character: "All Might",
+    quote: "I AM HERE!",
+  },
   {
     anime: "Demon Slayer",
     character: "Tanjiro Kamado",
-    quote: "I will never give up! I'll keep moving forward!",
+    quote: "Set your heart ablaze!",
   },
   {
     anime: "One Punch Man",
     character: "Saitama",
-    quote: "I'm just a hero who does this for fun.",
+    quote: "I'm just a guy who's a hero for fun.",
   },
   {
     anime: "Jujutsu Kaisen",
     character: "Satoru Gojo",
-    quote: "I'm the strongest.",
+    quote: "Throughout heaven and earth, I alone am the honored one.",
   },
   {
     anime: "Hunter x Hunter",
     character: "Gon Freecss",
-    quote: "I'll do my best! I'll never give up!",
+    quote: "I'll kill you!",
   },
   {
     anime: "Cowboy Bebop",
@@ -56,22 +60,22 @@ const QUOTES = [
   {
     anime: "Dragon Ball Z",
     character: "Goku",
-    quote: "I am the hope of the universe!",
+    quote: "I'm the hope of the universe.",
   },
   {
     anime: "Sailor Moon",
     character: "Usagi Tsukino",
-    quote: "In the name of the moon, I'll punish you!",
+    quote: "In the name of the Moon, I'll punish you!",
   },
   {
     anime: "Spy x Family",
     character: "Loid Forger",
-    quote: "For the mission.",
+    quote: "For the sake of world peace.",
   },
   {
     anime: "Chainsaw Man",
     character: "Denji",
-    quote: "I want to touch some boobs!",
+    quote: "I wanna touch some boobs!",
   },
   {
     anime: "Neon Genesis Evangelion",
@@ -81,43 +85,122 @@ const QUOTES = [
   {
     anime: "Ghost in the Shell",
     character: "Motoko Kusanagi",
-    quote: "My ghost is drifting away.",
+    quote: "The net is vast and infinite.",
   },
   {
     anime: "Mob Psycho 100",
-    character: "Shigeo Kageyama",
-    quote: "I've always known I'm not special.",
+    character: "Reigen Arataka",
+    quote: "You are being deceived.",
   },
-  { anime: "Vinland Saga", character: "Thorfinn", quote: "I have no enemies." },
   {
-    anime: "Kaguya-sama",
-    character: "Miyuki Shirogane",
+    anime: "Vinland Saga",
+    character: "Thorfinn",
+    quote: "I have no enemies.",
+  },
+  {
+    anime: "Kaguya-sama: Love Is War",
+    character: "Narrator",
     quote: "The first one to confess loses.",
   },
   {
     anime: "Berserk",
     character: "Guts",
-    quote: "I struggle, I conquer, I endure.",
+    quote: "I have yet to find what I'm looking for.",
   },
   {
     anime: "Steins;Gate",
-    character: "Okabe Rintaro",
+    character: "Rintarou Okabe",
     quote: "El Psy Kongroo.",
   },
   {
     anime: "Code Geass",
     character: "Lelouch vi Britannia",
-    quote: "I destroy the world... and create it anew.",
+    quote: "The only ones who should kill are those prepared to be killed.",
   },
   {
     anime: "Fate/Zero",
-    character: "Kiritsugu Emiya",
-    quote: "I will save everyone. That's what I've decided.",
+    character: "Gilgamesh",
+    quote: "Enkidu!",
   },
   {
     anime: "Gurren Lagann",
     character: "Kamina",
-    quote: "Don't believe in yourself. Believe in me who believes in you!",
+    quote: "Believe in the me that believes in you!",
+  },
+  {
+    anime: "Bleach",
+    character: "Ichigo Kurosaki",
+    quote: "Bankai!",
+  },
+  {
+    anime: "JoJo's Bizarre Adventure",
+    character: "Dio Brando",
+    quote: "ZA WARUDO!",
+  },
+  {
+    anime: "JoJo's Bizarre Adventure",
+    character: "Jotaro Kujo",
+    quote: "Yare yare daze.",
+  },
+  {
+    anime: "Dragon Ball Z",
+    character: "Vegeta",
+    quote: "It's over 9000!",
+  },
+  {
+    anime: "Naruto",
+    character: "Rock Lee",
+    quote: "I will never go back on my word.",
+  },
+  {
+    anime: "One Piece",
+    character: "Roronoa Zoro",
+    quote: "Nothing happened.",
+  },
+  {
+    anime: "One Piece",
+    character: "Sanji",
+    quote: "I have a gentleman's code.",
+  },
+  {
+    anime: "Attack on Titan",
+    character: "Levi Ackerman",
+    quote: "Give up on your dreams and die.",
+  },
+  {
+    anime: "Death Note",
+    character: "Light Yagami",
+    quote: "I'll take a potato chip... and eat it!",
+  },
+  {
+    anime: "Naruto",
+    character: "Kakashi Hatake",
+    quote: "Those who break the rules are scum.",
+  },
+  {
+    anime: "Demon Slayer",
+    character: "Rengoku",
+    quote: "Set your heart ablaze!",
+  },
+  {
+    anime: "Jujutsu Kaisen",
+    character: "Satoru Gojo",
+    quote: "Throughout heaven and earth, I alone am the honored one.",
+  },
+  {
+    anime: "Code Geass",
+    character: "Lelouch vi Britannia",
+    quote: "I, Lelouch vi Britannia, command you!",
+  },
+  {
+    anime: "Black Clover",
+    character: "Asta",
+    quote: "My magic is never giving up!",
+  },
+  {
+    anime: "Haikyuu!!",
+    character: "Shoyo Hinata",
+    quote: "I am Hinata Shoyo, from the concrete!",
   },
 ];
 

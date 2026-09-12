@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Quote } from "lucide-react";
 
 interface QuoteData {
   anime: string;
@@ -15,6 +14,12 @@ async function fetchQuote(): Promise<QuoteData> {
   return res.json();
 }
 
+const FALLBACK: QuoteData = {
+  quote: "Anime is not just a hobby, it's a way of life.",
+  character: "Anime Hub Team",
+  anime: "",
+};
+
 export function QuoteCard() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["quote"],
@@ -23,55 +28,79 @@ export function QuoteCard() {
     refetchOnMount: false,
   });
 
-  // Loading state
   if (isLoading) {
     return (
-      <div className="p-6 md:p-8 rounded-2xl bg-surface-container border border-border animate-pulse">
-        <div className="flex items-start gap-4">
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-surface-container-high" />
-          <div className="flex-1 space-y-3">
-            <div className="h-4 bg-surface-container-high rounded w-3/4" />
-            <div className="h-4 bg-surface-container-high rounded w-2/3" />
-            <div className="h-4 bg-surface-container-high rounded w-1/2" />
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-surface-container p-6 md:p-8">
+        <div className="animate-pulse space-y-4">
+          <div className="space-y-2">
+            <div className="h-4 w-11/12 rounded bg-surface-container-high" />
+            <div className="h-4 w-3/4 rounded bg-surface-container-high" />
+            <div className="h-4 w-1/2 rounded bg-surface-container-high" />
+          </div>
+          <div className="flex items-center gap-2 pt-1">
+            <div className="h-4 w-0.5 bg-surface-container-high" />
+            <div className="h-3 w-32 rounded bg-surface-container-high" />
           </div>
         </div>
       </div>
     );
   }
 
-  // Error state - show fallback quote
-  if (error || !data) {
-    return (
-      <div className="p-6 md:p-8 rounded-2xl bg-surface-container border border-border">
-        <div className="flex items-start gap-4">
-          <Quote className="w-8 h-8 md:w-10 md:h-10 text-primary flex-shrink-0 mt-1" />
-          <div>
-            <p className="text-base md:text-lg font-medium text-on-surface italic">
-              "Anime is not just a hobby, it's a way of life."
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              — Anime Hub Team
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const shown = error || !data ? FALLBACK : data;
+  const isFallback = error || !data;
 
-  // Data loaded
   return (
-    <div className="p-6 md:p-8 rounded-2xl bg-surface-container border border-border hover:border-primary/20 transition-colors">
-      <div className="flex items-start gap-4">
-        <Quote className="w-8 h-8 md:w-10 md:h-10 text-primary flex-shrink-0 mt-1" />
-        <div>
-          <p className="text-base md:text-lg font-medium text-on-surface italic leading-relaxed">
-            "{data.quote}"
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            — {data.character}, {data.anime}
-          </p>
-        </div>
-      </div>
+    <div className="quote-card group relative overflow-hidden rounded-2xl border border-border bg-surface-container p-6 md:p-8">
+      {/* corner fold — panel-note motif */}
+      <div
+        className="pointer-events-none absolute right-0 top-0 h-5 w-5 bg-surface-container-high"
+        style={{ clipPath: "polygon(100% 0, 0 0, 100% 100%)" }}
+        aria-hidden
+      />
+
+      {/* oversized quotation glyph, sits behind the text */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -left-1 -top-6 select-none font-serif text-[6rem] leading-none text-primary/10 md:text-[7.5rem]"
+      >
+        “
+      </span>
+
+      <blockquote className="relative">
+        <p className="font-serif text-lg italic leading-relaxed text-on-surface md:text-xl">
+          {shown.quote}
+        </p>
+        <footer className="mt-4 flex items-center gap-2">
+          <span className="h-4 w-0.5 shrink-0 bg-primary" aria-hidden />
+          <cite className="not-italic text-sm text-muted-foreground">
+            <span className="font-medium text-on-surface">
+              {shown.character}
+            </span>
+            {!isFallback && shown.anime ? <> — {shown.anime}</> : null}
+          </cite>
+        </footer>
+      </blockquote>
+
+      <style jsx>{`
+        .quote-card {
+          animation: quoteIn 0.4s ease-out;
+        }
+        @keyframes quoteIn {
+          from {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .quote-card {
+            animation: none;
+          }
+        }
+      `}</style>
     </div>
   );
 }
