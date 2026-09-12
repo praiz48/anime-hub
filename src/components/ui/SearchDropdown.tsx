@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import { useSearchAnime } from "@/hooks/useAnime";
 import Image from "next/image";
 import Link from "next/link";

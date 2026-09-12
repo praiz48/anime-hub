@@ -11,7 +11,6 @@ import {
   fetchRandomAnime,
   getCurrentSeason,
   getNextSeason,
-  type AniListMedia,
 } from "@/lib/api/anilist";
 
 // Query keys
